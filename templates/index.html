@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+    >
+
+    <title>Nogin.nl?</title>
+
+    <style>
+        :root {
+            --background: #f3f4f6;
+            --surface: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --green: #16a34a;
+            --gray: #9ca3af;
+            --focus: #2563eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0.75rem;
+            background: var(--background);
+            color: var(--text);
+            font-family: system-ui, sans-serif;
+        }
+
+        main {
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 0 0 0.75rem;
+            font-size: 1.4rem;
+        }
+
+        .table-wrapper {
+            overflow: hidden;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.6rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 0.7rem 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .status-cell {
+            width: 1%;
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        .status-text {
+            margin-right: 0.5rem;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 27px;
+            vertical-align: middle;
+        }
+
+        .switch input {
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+            background: var(--gray);
+            border-radius: 999px;
+            transition: background 0.2s ease;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            top: 3px;
+            left: 3px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+            transition: transform 0.2s ease;
+        }
+
+        input:checked + .slider {
+            background: var(--green);
+        }
+
+        input:checked + .slider::before {
+            transform: translateX(19px);
+        }
+
+        input:focus-visible + .slider {
+            outline: 3px solid var(--focus);
+            outline-offset: 2px;
+        }
+
+        input:disabled + .slider {
+            cursor: wait;
+            opacity: 0.55;
+        }
+
+        .connection-status {
+            margin: 0.6rem 0 0;
+            color: var(--muted);
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        @media (min-width: 600px) {
+            body {
+                padding: 2rem 1rem;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            th,
+            td {
+                padding: 0.8rem 1rem;
+            }
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+<main>
+    <h1>Nogin.nl?</h1>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Naam</th>
+                <th scope="col" class="status-cell">Status</th>
+            </tr>
+            </thead>
+
+            <tbody id="people-list"></tbody>
+        </table>
+    </div>
+    <p
+            id="connection-status"
+            class="connection-status"
+            aria-live="polite"
+    >
+    </p>
+</main>
+
+<script>
+    let people = [];
+    const listElement = document.getElementById("people-list");
+    const connectionStatusElement =
+        document.getElementById("connection-status");
+
+    let currentState = {};
+    let requestInProgress = false;
+
+    async function loadPeople() {
+        const response = await fetch(`/people.json?t=${Date.now()}`, {
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error("Unable to load people");
+        }
+
+        people = await response.json();
+        renderPeople();
+    }
+
+    function displayName(name) {
+        return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+
+    function renderPeople() {
+        listElement.replaceChildren();
+
+        for (const person of people) {
+            const row = document.createElement("tr");
+
+            const nameCell = document.createElement("td");
+            const nameLink = document.createElement("a");
+            nameLink.href = `https://is${encodeURIComponent(person)}.nogin.nl`;
+            nameLink.textContent = displayName(person);
+            nameCell.appendChild(nameLink);
+
+            const statusCell = document.createElement("td");
+            statusCell.className = "status-cell";
+
+            const statusText = document.createElement("span");
+            statusText.className = "status-text";
+            statusText.dataset.statusFor = person;
+
+            const label = document.createElement("label");
+            label.className = "switch";
+
+            const input = document.createElement("input");
+            input.type = "checkbox";
+            input.dataset.personId = person;
+            input.setAttribute(
+                "aria-label",
+                `Toggle nogin.nl status for ${displayName(person)}`
+            );
+
+            const slider = document.createElement("span");
+            slider.className = "slider";
+
+            input.addEventListener("change", () => {
+                updatePerson(person, input.checked, input);
+            });
+
+            label.appendChild(input);
+            label.appendChild(slider);
+
+            statusCell.appendChild(statusText);
+            statusCell.appendChild(label);
+
+            row.appendChild(nameCell);
+            row.appendChild(statusCell);
+
+            listElement.appendChild(row);
+        }
+    }
+
+    function renderState(state) {
+        for (const person of people) {
+            let isInNL = true;
+            if (person in state) {
+                isInNL = state[person] === true;
+            }
+
+            const input = document.querySelector(
+                `input[data-person-id="${person}"]`
+            );
+
+            const statusText = document.querySelector(
+                `[data-status-for="${person}"]`
+            );
+
+            if (input) {
+                input.checked = isInNL;
+            }
+
+            if (statusText) {
+                statusText.textContent = isInNL ? "nogin.nl" : "nietin.nl";
+            }
+        }
+    }
+
+    async function loadState() {
+        if (requestInProgress) {
+            return;
+        }
+
+        requestInProgress = true;
+
+        try {
+            const response = await fetch(`/state.json?t=${Date.now()}`, {
+                cache: "no-store"
+            });
+
+            if (!response.ok) {
+                throw new Error("Unable to load status");
+            }
+
+            const state = await response.json();
+
+            currentState = state;
+            renderState(state);
+        } catch (error) {
+            connectionStatusElement.textContent = "Unable to connect";
+            console.error(error);
+        } finally {
+            requestInProgress = false;
+        }
+    }
+
+    async function updatePerson(personId, isInNL, input) {
+        input.disabled = true;
+
+        try {
+            const response = await fetch("/update.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    person: personId,
+                    isInNL: isInNL
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.error || "Update failed");
+            }
+
+            await loadState();
+        } catch (error) {
+            input.checked = currentState[personId] === true;
+            alert(error.message);
+        } finally {
+            input.disabled = false;
+        }
+    }
+
+    async function start() {
+        try {
+            await loadPeople();
+            await loadState();
+
+            setInterval(loadState, 1000);
+        } catch (error) {
+            connectionStatusElement.textContent = "Unable to load page data";
+            console.error(error);
+        }
+    }
+
+    start();
+</script>
+</body>
+</html>

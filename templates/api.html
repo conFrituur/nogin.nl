@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101828">
+    <title>Items API — Documentation</title>
+
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #182230;
+            --muted: #667085;
+            --line: #e5e7eb;
+            --surface: #fff;
+            --page: #f5f7fb;
+            --nav: #101828;
+            --accent: #635bff;
+            --green: #067647;
+            --blue: #175cd3;
+            --red: #b42318;
+            --code: #111827;
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            background: var(--page);
+            color: var(--ink);
+            font: 15px/1.65 Inter, ui-sans-serif, system-ui, -apple-system,
+            BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .layout {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+        }
+
+        aside {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 30px 22px;
+            background: var(--nav);
+            color: #d0d5dd;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 44px;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: -.02em;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 36px;
+            height: 36px;
+            place-items: center;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #8b83ff, #5b50e8);
+            color: #fff;
+            font-size: 19px;
+        }
+
+        .nav-label {
+            margin: 0 0 12px 10px;
+            color: #98a2b3;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        nav a {
+            display: block;
+            margin: 4px 0;
+            padding: 9px 11px;
+            border-radius: 8px;
+            color: #d0d5dd;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            background: #202b3c;
+            color: #fff;
+        }
+
+        .sidebar-note {
+            position: absolute;
+            right: 22px;
+            bottom: 24px;
+            left: 22px;
+            padding: 14px;
+            border: 1px solid #344054;
+            border-radius: 10px;
+            color: #c0c7d2;
+            font-size: 12px;
+        }
+
+        main {
+            width: min(100%, 1000px);
+            padding: 54px 60px 80px;
+        }
+
+        .eyebrow {
+            margin: 0 0 10px;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(34px, 5vw, 48px);
+            letter-spacing: -.045em;
+            line-height: 1.1;
+        }
+
+        .intro {
+            max-width: 620px;
+            margin: 16px 0 26px;
+            color: var(--muted);
+            font-size: 17px;
+        }
+
+        .base-url {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 13px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            background: var(--surface);
+            color: #344054;
+            font-size: 13px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #12b76a;
+            box-shadow: 0 0 0 3px #d1fadf;
+        }
+
+        .section-title {
+            margin: 46px 0 16px;
+            font-size: 21px;
+            letter-spacing: -.02em;
+        }
+
+        .endpoint {
+            margin: 16px 0;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--surface);
+            box-shadow: 0 2px 5px rgb(16 24 40 / 3%);
+        }
+
+        .endpoint-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 17px 20px;
+            border-bottom: 1px solid #eef0f3;
+        }
+
+        .method {
+            min-width: 57px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .04em;
+        }
+
+        .get { background: #ecfdf3; color: var(--green); }
+        .patch { background: #eff8ff; color: var(--blue); }
+        .put { background: #f4f3ff; color: #5925dc; }
+
+        .route {
+            color: #101828;
+            font: 600 14px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+
+        .endpoint-body { padding: 18px 20px 20px; }
+
+        .endpoint-body p {
+            margin: 0 0 14px;
+            color: var(--muted);
+        }
+
+        .label {
+            margin: 18px 0 8px;
+            color: #475467;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+
+        pre {
+            margin: 0;
+            overflow-x: auto;
+            padding: 16px 18px;
+            border: 1px solid #263244;
+            border-radius: 9px;
+            background: var(--code);
+            color: #e4e7ec;
+            font: 13px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        p code, li code {
+            padding: 2px 5px;
+            border: 1px solid #eaecf0;
+            border-radius: 5px;
+            background: #f9fafb;
+            color: #344054;
+            font-size: .9em;
+        }
+
+        .error-list {
+            display: grid;
+            gap: 10px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .error-list li {
+            padding: 12px 14px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            background: var(--surface);
+            color: #475467;
+        }
+
+        .notice {
+            margin-top: 28px;
+            padding: 15px 17px;
+            border: 1px solid #fedf89;
+            border-radius: 10px;
+            background: #fffaeb;
+            color: #7a2e0e;
+            font-size: 13px;
+        }
+
+        @media (max-width: 760px) {
+            .layout { grid-template-columns: 1fr; }
+
+            aside {
+                position: static;
+                height: auto;
+                padding: 18px 20px;
+            }
+
+            .brand { margin: 0; }
+
+            nav, .nav-label, .sidebar-note { display: none; }
+
+            main { padding: 36px 20px 60px; }
+            .section-title { margin-top: 36px; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+    <aside>
+        <div class="brand">
+            <span class="brand-mark">/</span>
+            <span>Nogin.nl API</span>
+        </div>
+
+        <p class="nav-label">Documentation</p>
+        <nav aria-label="Documentation">
+            <a href="#list-items">- <strong>LIST</strong> all persons</a>
+            <a href="#get-item">- <strong>GET</strong> a person by name</a>
+            <a href="#update-item">- <strong>UPDATE</strong> state of a person</a>
+        </nav>
+
+        <div class="sidebar-note">
+            A small REST API for listing, retrieving, and updating a person's in.nl status.
+        </div>
+    </aside>
+
+    <main>
+        <section id="overview">
+            <p class="eyebrow">API reference</p>
+            <h1>Nogin.nl REST API</h1>
+            <p class="intro">
+                Simple endpoint for working with nogin.nl. Requests and responses use JSON.
+            </p>
+            <div class="base-url">
+                <span class="status-dot"></span>
+                <span>Base URL</span>
+                <code>https://api.nogin.nl</code>
+            </div>
+        </section>
+
+        <h2 class="section-title">Endpoints</h2>
+
+        <section class="endpoint" id="list-items">
+            <div class="endpoint-head">
+                <span class="method get">GET</span>
+                <code class="route">/persons</code>
+            </div>
+            <div class="endpoint-body">
+                <p>Returns all persons and nogin.nl states.</p>
+                <div class="label">Example request</div>
+                <pre><code>curl https://api.nogin.nl/persons</code></pre>
+                <div class="label">Example response</div>
+                <pre><code>[
+  {"name": "sjaak", "isNogInNL": true},
+  {"name": "harrie", "isNogInNL": false}
+]</code></pre>
+            </div>
+        </section>
+
+        <section class="endpoint" id="get-item">
+            <div class="endpoint-head">
+                <span class="method get">GET</span>
+                <code class="route">/persons/{name}</code>
+            </div>
+            <div class="endpoint-body">
+                <p>Returns the specific person matching the name, all persons have lowercase-only names</p>
+                <div class="label">Example request</div>
+                <pre><code>curl https://api.nogin.nl/persons/sjaak</code></pre>
+                <div class="label">Example response</div>
+                <pre><code>{"name": "sjaak", "isNogInNL": true}</code></pre>
+            </div>
+        </section>
+
+        <section class="endpoint" id="update-item">
+            <div class="endpoint-head">
+                <span class="method patch">PATCH</span>
+                <code class="route">/persons/{name}</code>
+            </div>
+            <div class="endpoint-body">
+                <p>Updates an person's nogin.nl state. The request body must be an JSON encoded object/array containing 'isNogInNL' with a boolean value.</p>
+                <div class="label">Request body</div>
+                <pre><code>{"isNogInNL": false}</code></pre>
+                <div class="label">Example request</div>
+                <pre><code>curl -X PATCH https://api.nogin.nl/persons/sjaak \
+  -H "Content-Type: application/json" \
+  -d '{"isNogInNL": false}'</code></pre>
+                <div class="label">Example response</div>
+                <pre><code>{"name": "sjaak", "isNogInNL": false}</code></pre>
+                <p style="margin-top: 14px">
+                    The API also accepts <span class="method put">PUT</span> for this route.
+                </p>
+            </div>
+        </section>
+
+        <section id="errors">
+            <h2 class="section-title">Errors</h2>
+            <ul class="error-list">
+                <li><code>400 Bad Request</code> — the POST body is missing or invalid.</li>
+                <li><code>404 Not Found</code> — the item or route was not found.</li>
+            </ul>
+            <div class="label">Example error response</div>
+            <pre><code>{"error": "Person not found"}</code></pre>
+        </section>
+
+        <div class="notice">
+            <strong>Note:</strong> This example stores items in memory. Updates are
+            lost when the PHP server restarts.
+        </div>
+    </main>
+</div>
+</body>
+</html>

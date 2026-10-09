@@ -2,7 +2,7 @@
 
 $vhost = $_SERVER['HTTP_HOST'];
 
-if(preg_match('/^is(\S+)\.nogin\.nl$/', $vhost, $nameMatch)) {
+if(preg_match('/^is([a-z]+)\.nogin\.nl$/', $vhost, $nameMatch)) {
     $name = $nameMatch[1];
     if(isInNl($name)) {
         require 'templates/nogin.php';

@@ -1,5 +1,5 @@
 # Nogin.nl
-[![php](https://img.shields.io/badge/PHP-^8.0-brightgreen?logo=php&style=flat&logoColor=lightgrey)](https://www.php.net/supported-versions.php)
+[![php](https://img.shields.io/badge/PHP-^8.4-brightgreen?logo=php&style=flat&logoColor=lightgrey)](https://www.php.net/supported-versions.php)
 
 >**NOTE:** This is a largely vibe-coded low-effort fun little hobby project 
 

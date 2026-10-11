@@ -10,4 +10,4 @@ Toggle whether you are still in NL or not, for everybody to see and modify! What
 use URL `https://is<name>.nogin.nl` to view a dedicated page showing whether that person is still in NL. 
 
 # REST API
-open api.php for documentation on how to use the singular "/persons" endpoint 
+open /api.php for documentation on how to use the singular "/persons" endpoint 

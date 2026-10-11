@@ -5,7 +5,8 @@ $repository = new Repository();
 $vhost = $_SERVER['HTTP_HOST'];
 
 if(preg_match('/^is([a-z]+)\.nogin\.nl$/', $vhost, $nameMatch)) {
-    $person = $repository->findPerson($nameMatch[1]);
+    $name = $nameMatch[1]; // $name is used in template
+    $person = $repository->findPerson($name);
     // default to in NL
     if($person === null || $person->isNogInNL()) {
         require 'templates/nogin.php';

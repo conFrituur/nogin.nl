@@ -24,14 +24,34 @@ class Repository
         return $this->state->findPersonByName($name);
     }
 
-    public function updatePersonInState(string $name, bool $isNogInNL): void
+    public function updatePersonAndSaveState(string $name, bool $isNogInNL): bool
     {
-        $this->state = $this->getState()->updatePerson(new Person($name, $isNogInNL));
+        $lock = fopen(self::STATE_LOCKFILE, 'c');
+
+        if ($lock === false) {
+            return false;
+        }
+
+        try {
+            // Wait for other writers before reading the state to update.
+            if (!flock($lock, LOCK_EX)) {
+                return false;
+            }
+
+            $this->loadState();
+            $this->syncPeopleWithState();
+            $this->state = $this->getState()->updatePerson(new Person($name, $isNogInNL));
+            return $this->writeState();
+        } finally {
+            flock($lock, LOCK_UN);
+            fclose($lock);
+        }
     }
 
     private function loadState(): void
     {
-        $stateArray = [];
+        $this->state = new State([]);
+        $stateArray  = [];
 
         if (file_exists(self::STATE_FILE)) {
             $stateContents = file_get_contents(self::STATE_FILE);
@@ -63,19 +83,11 @@ class Repository
         }
 
         $desiredState = State::fromListOfNames($personsInList);
-        $this->state = $desiredState->updatePersonsFromState($this->getState());
+        $this->state  = $desiredState->updatePersonsFromState($this->getState());
     }
 
-    public function saveState(): bool
+    private function writeState(): bool
     {
-        $lock = fopen(self::STATE_LOCKFILE, 'c');
-
-        if ($lock === false || !flock($lock, LOCK_EX)) {
-            return false;
-        }
-
-        $this->syncPeopleWithState();
-
         try {
             $newContents = json_encode(
                 $this->getState()->toArray(),
@@ -105,9 +117,6 @@ class Repository
 
         } catch (Throwable) {
             return false;
-        } finally {
-            flock($lock, LOCK_UN);
-            fclose($lock);
         }
 
         return true;

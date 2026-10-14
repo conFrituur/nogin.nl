@@ -83,10 +83,8 @@ class Api
             $this->response(['error' => 'isNogInNL is not a boolean value'], 400);
         }
 
-        $this->repository->updatePersonInState($name, $body['isNogInNL']);
-
-        if (!$this->repository->saveState()) {
-            $this->response(['error' => 'Could update person state'], 500);
+        if (!$this->repository->updatePersonAndSaveState($name, $body['isNogInNL'])) {
+            $this->response(['error' => 'Could not save changes'], 500);
         }
     }
 

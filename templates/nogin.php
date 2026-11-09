@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><?php echo ucfirst($name) ?> is nog in NL</title>
 
-    <link rel="stylesheet" href="/css/nogin.css">
+    <link rel="stylesheet" href="/assets/css/nogin.css">
 </head>
 
 <body>

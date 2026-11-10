@@ -1,4 +1,4 @@
-const CACHE_NAME = "nogin-static-v6";
+const CACHE_NAME = "nogin-static-v8";
 const STATIC_ASSETS = [
     "/assets/offline.html",
     "/assets/css/index.css",
@@ -8,6 +8,8 @@ const STATIC_ASSETS = [
     "/assets/js/index.js",
     "/assets/js/api.js",
     "/assets/js/pwa.js",
+    "/assets/js/offline.js",
+    "/assets/js/offline.js?v=2",
     "/assets/favicon.ico",
     "/assets/apple-touch-icon.png",
     "/assets/icon-192.png",

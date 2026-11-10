@@ -31,6 +31,8 @@ For PWA changes, check the manifest and service worker in browser developer tool
 
 ## Progressive Web App & Icons
 
+`assets/js/offline.js` powers the offline page's Try again button and automatic recovery. It probes the original page with an uncached fetch on load, every second while visible, on the browser's online event, and when the page becomes visible. Keep the original hostname, path, query, and fragment when recovering; do not rely on `navigator.onLine` alone. Keep its versioned script URL in `assets/offline.html` and the service worker precache list in sync.
+
 All page templates link to `/assets/manifest.webmanifest` and load `/assets/js/pwa.js`, which registers `/sw.js` with explicit `{ scope: "/" }`. Keep the worker at the root so its root scope needs no `Service-Worker-Allowed` header. See the Nginx example in `README.md`. The manifest uses root-relative icon URLs and `/` for `id`, `start_url`, and `scope`, so each hostname launches its own root page. Serve the manifest as `application/manifest+json` and the worker as JavaScript; hosting must serve these and `/assets/` as static files.
 
 The service worker precaches only the files listed in `STATIC_ASSETS`. Navigations use the network with `/assets/offline.html` as the fallback on network failure; live status pages and API responses are never cached by the worker. Non-GET and cross-origin requests bypass it. Preserve this behavior to avoid displaying stale location data. Increment the version in `CACHE_NAME` whenever cached assets change, and update `STATIC_ASSETS` when adding or removing cached files. Activation removes older caches with the `nogin-static-` prefix.

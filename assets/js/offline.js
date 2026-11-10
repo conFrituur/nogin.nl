@@ -1,4 +1,3 @@
-const retryButton = document.getElementById("retry");
 const retryStatus = document.getElementById("retry-status");
 // A service worker fallback keeps the original navigation URL in the address bar.
 const targetUrl = new URL(window.location.href);
@@ -16,8 +15,6 @@ async function retryConnection() {
     }
 
     checking = true;
-    retryButton.disabled = true;
-    retryStatus.textContent = "Checking connection…";
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
@@ -37,15 +34,13 @@ async function retryConnection() {
         retryStatus.textContent = "Connected. Returning to your page…";
         window.location.replace(targetUrl.href);
     } catch (error) {
-        retryStatus.textContent = "Unable to reach this page. We will keep trying automatically.";
+        retryStatus.textContent = "You are offline. Retrying automatically…";
     } finally {
         clearTimeout(timeout);
         checking = false;
-        retryButton.disabled = false;
     }
 }
 
-retryButton.addEventListener("click", retryConnection);
 window.addEventListener("online", retryConnection);
 document.addEventListener("visibilitychange", () => {
     if (!document.hidden) {

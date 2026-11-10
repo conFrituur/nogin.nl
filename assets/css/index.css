@@ -66,7 +66,9 @@ h1 img {
 
 table {
     width: 100%;
-    border-collapse: collapse;
+    /* Keep cell borders independent of the hidden connection-warning row. */
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
 th,
@@ -84,8 +86,12 @@ th {
     letter-spacing: 0.04em;
 }
 
-tbody tr:last-child td {
+#people-list > tr > td {
     border-bottom: 0;
+}
+
+#people-list > tr:not(:last-child) > td {
+    border-bottom: 1px solid var(--border);
 }
 
 .status-cell {
@@ -154,11 +160,31 @@ input:disabled + .slider {
     opacity: 0.55;
 }
 
-.connection-status {
-    margin: 0.6rem 0 0;
-    color: var(--muted);
-    font-size: 0.75rem;
-    text-align: center;
+.connection-warning td {
+    padding: 0.65rem 0.8rem;
+    background: #fff1f2;
+    color: #9f1239;
+    border-bottom: 1px solid #fecdd3;
+}
+
+.connection-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.connection-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-weight: 700;
 }
 
 @media (min-width: 600px) {

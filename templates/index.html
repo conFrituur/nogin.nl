@@ -10,7 +10,7 @@
     <script src="/assets/js/pwa.js?v=6" defer></script>
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="/assets/css/index.css?v=3">
+    <link rel="stylesheet" href="/assets/css/index.css?v=6">
 </head>
 <body>
 <div class="ios-status-strip" aria-hidden="true"></div>
@@ -24,11 +24,20 @@
                 <th scope="col" class="status-cell">Status</th>
             </tr>
             </thead>
+            <tbody>
+            <tr id="connection-warning" class="connection-warning" hidden>
+                <td colspan="2">
+                    <div class="connection-notice">
+                        <span class="connection-icon" aria-hidden="true">!</span>
+                        <span id="connection-status" role="status" aria-live="polite"></span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
             <tbody id="people-list"></tbody>
         </table>
     </div>
-    <p id="connection-status" class="connection-status" aria-live="polite"></p>
 </main>
-<script src="/assets/js/index.js"></script>
+<script src="/assets/js/index.js?v=3"></script>
 </body>
 </html>

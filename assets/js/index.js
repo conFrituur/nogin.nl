@@ -2,6 +2,22 @@ let initialized = false;
 const listElement = document.getElementById("people-list");
 const connectionStatusElement =
     document.getElementById("connection-status");
+const connectionWarningElement = document.getElementById("connection-warning");
+let connected = false;
+const pendingUpdates = new Set();
+
+function refreshToggleAvailability() {
+    for (const input of listElement.querySelectorAll("input[data-person-id]")) {
+        input.disabled = !connected || pendingUpdates.has(input.dataset.personId);
+    }
+}
+
+function setConnectionWarning(message = "") {
+    connected = !message;
+    connectionWarningElement.hidden = !message;
+    connectionStatusElement.textContent = message;
+    refreshToggleAvailability();
+}
 
 let currentState = {};
 let requestInProgress = false;
@@ -109,8 +125,11 @@ async function loadState() {
             renderPeople();
         }
         renderState(state);
+        setConnectionWarning();
     } catch (error) {
-        connectionStatusElement.textContent = "Unable to connect";
+        setConnectionWarning(initialized
+            ? "Unable to connect. Retrying automatically…"
+            : "Unable to load page data. Retrying automatically…");
         console.error(error);
     } finally {
         requestInProgress = false;
@@ -118,7 +137,13 @@ async function loadState() {
 }
 
 async function updatePerson(name, isNogInNL, input) {
-    input.disabled = true;
+    if (!connected || pendingUpdates.has(name)) {
+        input.checked = currentState.find((person) => person.name === name)?.isNogInNL ?? false;
+        return;
+    }
+
+    pendingUpdates.add(name);
+    refreshToggleAvailability();
 
     try {
         const response = await fetch("api.php/persons/" + name, {
@@ -139,20 +164,23 @@ async function updatePerson(name, isNogInNL, input) {
 
         await loadState();
     } catch (error) {
-        input.checked = currentState[name] === true;
+        input.checked = currentState.find((person) => person.name === name)?.isNogInNL ?? false;
+        setConnectionWarning("Unable to update status. Retrying connection automatically…");
         alert(error.message);
     } finally {
-        input.disabled = false;
+        pendingUpdates.delete(name);
+        refreshToggleAvailability();
     }
 }
 
 async function start() {
+    // Schedule retries before the first attempt so startup failures cannot stop polling.
+    setInterval(loadState, 1000);
+
     try {
         await loadState();
-
-        setInterval(loadState, 1000);
     } catch (error) {
-        connectionStatusElement.textContent = "Unable to load page data";
+        setConnectionWarning("Unable to load page data. Retrying automatically…");
         console.error(error);
     }
 }

@@ -31,6 +31,8 @@ For PWA changes, check the manifest and service worker in browser developer tool
 
 ## Progressive Web App & Icons
 
+The main page heading scrolls in normal document flow. An aria-hidden `.ios-status-strip` paints an 11px solid strip at the viewport top in standalone mode, with pointer events disabled. This is an experimental workaround for iOS 27's PWA top blur; confirm results on a physical iPhone before considering the issue resolved. Keep the strip background matched to the page and avoid backdrop blur.
+
 `assets/js/offline.js` powers the offline page's Try again button and automatic recovery. It probes the original page with an uncached fetch on load, every second while visible, on the browser's online event, and when the page becomes visible. Keep the original hostname, path, query, and fragment when recovering; do not rely on `navigator.onLine` alone. Keep its versioned script URL in `assets/offline.html` and the service worker precache list in sync. The offline HTML itself uses a versioned URL in both the service worker precache list and navigation fallback lookup; increment that version and `CACHE_NAME` whenever the offline HTML changes.
 
 All page templates link to `/assets/manifest.webmanifest` and load `/assets/js/pwa.js`, which registers `/sw.js` with explicit `{ scope: "/" }`. Keep the worker at the root so its root scope needs no `Service-Worker-Allowed` header. See the Nginx example in `README.md`. The manifest uses root-relative icon URLs and `/` for `id`, `start_url`, and `scope`, so each hostname launches its own root page. Serve the manifest as `application/manifest+json` and the worker as JavaScript; hosting must serve these and `/assets/` as static files.

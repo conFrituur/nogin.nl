@@ -56,6 +56,11 @@ Recent commits use short, plain descriptions such as `update favicon` and `fix n
 
 Keep runtime `state.json` and `state.lock` out of commits; both are ignored. The PHP process needs write access to the repository root where temporary state files are created. Preserve locking and atomic replacement when changing persistence.
 
+# Webserver
+
+The webserver can be configured to serve templates/index.html as the root and templates/api.html on the api subdomain directly. so it doesn't need to call PHP, which would just include the template files and do nothing else anyway.
+files in the root should be served with no-cache as cache-control. files in the assets folder should be allowed to be cached.
+
 # AGENT Instructions
 
 When changes occur in the assets folder, make sure to include/update a cache-busting mechanism in the HTML referencing it.

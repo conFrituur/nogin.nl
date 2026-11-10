@@ -1,10 +1,9 @@
-const CACHE_NAME = "nogin-static-v14";
+const CACHE_NAME = "nogin-static-v17";
 const STATIC_ASSETS = [
     "/assets/offline.html?v=7",
     "/assets/css/index.css?v=6",
     "/assets/css/nogin.css",
     "/assets/css/nietin.css",
-    "/assets/css/api.css",
     "/assets/js/index.js?v=3",
     "/assets/js/api.js",
     "/assets/js/pwa.js",

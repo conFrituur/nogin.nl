@@ -53,13 +53,11 @@ body {
     text-decoration: none;
 }
 
-.brand-mark {
-    display: grid;
+.brand img {
+    display: block;
+    flex-shrink: 0;
     width: 32px;
     height: 32px;
-    place-items: center;
-    border-radius: 9px;
-    background: linear-gradient(135deg, #8b83ff, #5b50e8);
 }
 
 .menu-toggle {
@@ -297,7 +295,7 @@ li code {
     .mobile-header {
         position: fixed;
         inset: 0 auto 0 0;
-        width: 230px;
+        width: 280px;
         height: 100vh;
         padding: 28px 18px;
     }
@@ -322,7 +320,7 @@ li code {
     }
 
     main {
-        margin-left: 230px;
+        margin-left: 280px;
         padding: 54px 40px 70px;
     }
 }

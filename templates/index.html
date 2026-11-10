@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#6150ff">
     <title>Nogin.nl?</title>
-
+    <link rel="manifest" href="/assets/manifest.webmanifest">
+    <meta name="apple-mobile-web-app-title" content="Nogin.nl">
+    <script src="/assets/js/pwa.js?v=6" defer></script>
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
     <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body>
 <main>
-    <h1><img src="/favicon.ico" alt="" width="32" height="32"> Nogin.nl?</h1>
-
+    <h1><img src="/assets/favicon.ico" alt="" width="32" height="32"> Nogin.nl?</h1>
     <div class="table-wrapper">
         <table>
             <thead>
@@ -23,18 +23,11 @@
                 <th scope="col" class="status-cell">Status</th>
             </tr>
             </thead>
-
             <tbody id="people-list"></tbody>
         </table>
     </div>
-    <p
-            id="connection-status"
-            class="connection-status"
-            aria-live="polite"
-    >
-    </p>
+    <p id="connection-status" class="connection-status" aria-live="polite"></p>
 </main>
-
 <script src="/assets/js/index.js"></script>
 </body>
 </html>

@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#6150ff">
     <title><?php echo ucfirst($name) ?> nietin.nl</title>
 
+    <link rel="manifest" href="/assets/manifest.webmanifest">
+    <meta name="apple-mobile-web-app-title" content="Nogin.nl">
+    <script src="/assets/js/pwa.js?v=6" defer></script>
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
     <link rel="stylesheet" href="/assets/css/nietin.css">
 </head>
 

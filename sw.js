@@ -1,6 +1,6 @@
-const CACHE_NAME = "nogin-static-v8";
+const CACHE_NAME = "nogin-static-v9";
 const STATIC_ASSETS = [
-    "/assets/offline.html",
+    "/assets/offline.html?v=2",
     "/assets/css/index.css",
     "/assets/css/nogin.css",
     "/assets/css/nietin.css",
@@ -8,7 +8,6 @@ const STATIC_ASSETS = [
     "/assets/js/index.js",
     "/assets/js/api.js",
     "/assets/js/pwa.js",
-    "/assets/js/offline.js",
     "/assets/js/offline.js?v=2",
     "/assets/favicon.ico",
     "/assets/apple-touch-icon.png",
@@ -39,8 +38,8 @@ self.addEventListener("fetch", (event) => {
 
     // Status pages and API data must always reflect the server's current state.
     if (request.mode === "navigate") {
-        event.respondWith(fetch(request).catch(() => caches.match("/assets/offline.html")));
-    } else if (STATIC_ASSETS.includes(url.pathname)) {
+        event.respondWith(fetch(request).catch(() => caches.match("/assets/offline.html?v=2")));
+    } else if (STATIC_ASSETS.includes(url.pathname + url.search)) {
         event.respondWith(caches.match(request).then((cached) => cached || fetch(request)));
     }
 });

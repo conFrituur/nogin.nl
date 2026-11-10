@@ -1,19 +1,11 @@
-const CACHE_NAME = "nogin-static-v17";
+const CACHE_NAME = "nogin-static-v18";
+// Only the offline fallback and the assets it needs are stored here.
 const STATIC_ASSETS = [
     "/assets/offline.html?v=7",
     "/assets/css/index.css?v=6",
-    "/assets/css/nogin.css",
-    "/assets/css/nietin.css",
-    "/assets/js/index.js?v=3",
-    "/assets/js/api.js",
-    "/assets/js/pwa.js",
     "/assets/js/offline.js?v=3",
     "/assets/favicon.ico",
-    "/assets/apple-touch-icon.png",
-    "/assets/icon-192.png",
-    "/assets/icon-512.png",
-    "/assets/icon-maskable-192.png",
-    "/assets/icon-maskable-512.png"
+    "/assets/apple-touch-icon.png"
 ];
 
 self.addEventListener("install", (event) => {
@@ -35,7 +27,8 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
-    // Status pages and API data must always reflect the server's current state.
+    // Normal requests use the browser's HTTP cache and server cache headers.
+    // Only failed navigations receive the offline fallback.
     if (request.mode === "navigate") {
         event.respondWith(fetch(request).catch(() => caches.match("/assets/offline.html?v=7")));
     } else if (STATIC_ASSETS.includes(url.pathname + url.search)) {

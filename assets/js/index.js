@@ -108,10 +108,13 @@ async function loadState() {
     }
 
     requestInProgress = true;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
 
     try {
         const response = await fetch(`api.php/persons`, {
-            cache: "no-store"
+            cache: "no-store",
+            signal: controller.signal
         });
 
         if (!response.ok) {
@@ -132,6 +135,7 @@ async function loadState() {
             : "Unable to load page data. Retrying automatically…");
         console.error(error);
     } finally {
+        clearTimeout(timeout);
         requestInProgress = false;
     }
 }
@@ -144,10 +148,13 @@ async function updatePerson(name, isNogInNL, input) {
 
     pendingUpdates.add(name);
     refreshToggleAvailability();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
 
     try {
         const response = await fetch("api.php/persons/" + name, {
             method: "PATCH",
+            signal: controller.signal,
             headers: {
                 "Content-Type": "application/json"
             },
@@ -168,6 +175,7 @@ async function updatePerson(name, isNogInNL, input) {
         setConnectionWarning("Unable to update status. Retrying connection automatically…");
         alert(error.message);
     } finally {
+        clearTimeout(timeout);
         pendingUpdates.delete(name);
         refreshToggleAvailability();
     }

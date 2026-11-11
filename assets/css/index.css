@@ -43,17 +43,21 @@ h1 img {
    while allowing the heading and the rest of the page to scroll normally. */
 .ios-status-strip {
     display: none;
+    position: fixed;
+    inset: 0 0 auto;
+    height: 11px;
+    z-index: 10;
+    pointer-events: none;
+    background-color: var(--background);
+}
+
+.ios-standalone .ios-status-strip {
+    display: block;
 }
 
 @media (display-mode: standalone) {
     .ios-status-strip {
         display: block;
-        position: fixed;
-        inset: 0 0 auto;
-        height: 11px;
-        z-index: 10;
-        pointer-events: none;
-        background-color: var(--background);
     }
 }
 

@@ -1,3 +1,5 @@
+document.documentElement.classList.toggle("ios-standalone", navigator.standalone === true);
+
 let initialized = false;
 const listElement = document.getElementById("people-list");
 const connectionStatusElement =

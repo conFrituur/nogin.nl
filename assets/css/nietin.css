@@ -70,7 +70,7 @@ body {
 
 /* At night the dot grid gives way to stars */
 :root[data-theme="dark"] .page::before {
-    background: url(../stars.svg?v=1) 0 0 / 900px 700px;
+    background: url(../stars.svg?v=2) 0 0 / 900px 700px;
     mask-image: linear-gradient(to bottom, #000 40%, transparent);
 }
 

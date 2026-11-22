@@ -96,14 +96,15 @@ body {
     right: 12%;
     width: 64px;
     height: 64px;
+    /* crescent: an offset shadow disc bites a curve out of the left side, faint earthshine inside it */
     background:
-            radial-gradient(circle at 34% 38%, rgba(0, 0, 0, 0.08) 0 10%, transparent 11%),
-            radial-gradient(circle at 64% 64%, rgba(0, 0, 0, 0.06) 0 14%, transparent 15%),
-            radial-gradient(circle at 66% 28%, rgba(0, 0, 0, 0.05) 0 7%, transparent 8%),
-            #f4f1de;
-    box-shadow:
-            0 0 0 12px rgba(244, 241, 222, 0.1),
-            0 0 60px 20px rgba(244, 241, 222, 0.15);
+            radial-gradient(circle at 82% 48%, rgba(0, 0, 0, 0.08) 0 7%, transparent 8%),
+            radial-gradient(circle at 74% 74%, rgba(0, 0, 0, 0.06) 0 6%, transparent 7%),
+            radial-gradient(circle at 72% 24%, rgba(0, 0, 0, 0.05) 0 5%, transparent 6%),
+            radial-gradient(circle 30px at 20% 46%, rgba(244, 241, 222, 0.08) 0 29px, #f4f1de 31px);
+    box-shadow: none;
+    /* drop-shadow follows the lit shape, unlike box-shadow */
+    filter: drop-shadow(0 0 18px rgba(244, 241, 222, 0.35));
 }
 
 .cloud,

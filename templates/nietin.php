@@ -7,7 +7,7 @@
     <title><?php echo ucfirst($name) ?> is nietin.nl</title>
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="/assets/css/nietin.css?v=12">
+    <link rel="stylesheet" href="/assets/css/nietin.css?v=14">
     <script src="/assets/js/theme.js?v=3"></script>
 </head>
 

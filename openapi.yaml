@@ -1,0 +1,145 @@
+openapi: 3.0.3
+info:
+  title: Nogin.nl REST API
+  description: Simple endpoint for working with nogin.nl. Requests and responses use JSON.
+  version: 1.0.0
+servers:
+  - url: https://api.nogin.nl
+paths:
+  /persons:
+    get:
+      summary: List persons
+      description: Returns all persons and nogin.nl states.
+      operationId: listPersons
+      responses:
+        '200':
+          description: All persons and their states
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+              example:
+                - name: sjaak
+                  isNogInNL: true
+                - name: harrie
+                  isNogInNL: false
+  /persons/{name}:
+    parameters:
+      - name: name
+        in: path
+        required: true
+        description: Person name. All persons have lowercase-only names.
+        schema:
+          type: string
+          example: sjaak
+    get:
+      summary: Get a person
+      description: Returns the specific person matching the name. All persons have lowercase-only names.
+      operationId: getPerson
+      responses:
+        '200':
+          description: The person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+              example:
+                name: sjaak
+                isNogInNL: true
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Update a person
+      description: >-
+        Updates a person's nogin.nl state. The request body must be a JSON
+        encoded object containing 'isNogInNL' with a boolean value.
+        The API also accepts PUT for this route.
+      operationId: updatePerson
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatePerson'
+      responses:
+        '200':
+          description: The updated person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+              example:
+                name: sjaak
+                isNogInNL: false
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      summary: Update a person
+      description: Same as PATCH.
+      operationId: replacePerson
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatePerson'
+      responses:
+        '200':
+          description: The updated person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+              example:
+                name: sjaak
+                isNogInNL: false
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Person:
+      type: object
+      required: [name, isNogInNL]
+      properties:
+        name:
+          type: string
+          example: sjaak
+        isNogInNL:
+          type: boolean
+          example: true
+    UpdatePerson:
+      type: object
+      required: [isNogInNL]
+      properties:
+        isNogInNL:
+          type: boolean
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+  requestBodies:
+    UpdatePerson:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdatePerson'
+          example:
+            isNogInNL: false
+  responses:
+    BadRequest:
+      description: The request body is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: isNogInNL is not a boolean value
+    NotFound:
+      description: The item or route was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Person not found

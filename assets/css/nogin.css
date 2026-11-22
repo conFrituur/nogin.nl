@@ -7,6 +7,27 @@
     --yellow: #f5c542;
     --green: #4f9d69;
     --pink: #e8799d;
+    --landscape: clamp(190px, 30vh, 320px);
+    --sky-top: #8fd3f4;
+    --sky-mid: #c9f0ff;
+    --sky-low: #fff1d6;
+    --card: rgba(255, 248, 232, 0.95);
+    --card-shadow: rgba(18, 48, 74, 0.18);
+    --cloud: rgba(255, 255, 255, 0.9);
+    --scenery: none;
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --navy: #f6efe0;
+    --red: #ff7a72;
+    --sky-top: #0b1a33;
+    --sky-mid: #172d52;
+    --sky-low: #2e4470;
+    --card: rgba(22, 36, 58, 0.95);
+    --card-shadow: rgba(0, 0, 0, 0.35);
+    --cloud: rgba(190, 205, 235, 0.18);
+    --scenery: brightness(0.5) saturate(0.8);
 }
 
 * {
@@ -15,30 +36,93 @@
 
 body {
     margin: 0;
-    min-height: 100vh;
     overflow-x: hidden;
     font-family: Arial, Helvetica, sans-serif;
     color: var(--navy);
-    background:
-            linear-gradient(to bottom, var(--sky) 0 67%, #92d5ef 67% 100%);
+    background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-low) 100%);
+}
+
+/* Stars, dark mode only */
+:root[data-theme="dark"] .page::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 30%;
+    background: url(../stars.svg?v=1) 0 0 / 900px 700px;
+    mask-image: linear-gradient(to bottom, #000, transparent);
+    z-index: -3;
 }
 
 .page {
     position: relative;
     min-height: 100vh;
+    min-height: 100dvh;
     display: grid;
     place-items: center;
-    padding: 24px 16px 150px;
+    /* reserve room for the landscape, but never so much that the card no longer fits */
+    padding: 24px 16px max(0px, min(calc(var(--landscape) * 0.7), 100dvh - 540px));
+    overflow: hidden;
     isolation: isolate;
+}
+
+/* Sky: the sun/moon doubles as the theme toggle */
+.sun {
+    position: absolute;
+    top: 12px;
+    right: 42px;
+    width: 96px;
+    height: 96px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background-color: #fff6c9;
+    box-shadow:
+            0 0 0 26px rgba(255, 233, 150, 0.45),
+            0 0 90px 50px rgba(255, 233, 150, 0.5);
+    cursor: pointer;
+    transition: all 0.5s ease;
+    -webkit-tap-highlight-color: transparent;
+    z-index: -2;
+}
+
+.sun:hover {
+    scale: 1.06;
+}
+
+.sun:focus-visible {
+    outline: 3px solid var(--navy);
+    outline-offset: 30px;
+}
+
+:root[data-theme="dark"] .sun {
+    top: 6%;
+    right: 12%;
+    width: 64px;
+    height: 64px;
+    background:
+            radial-gradient(circle at 34% 38%, rgba(0, 0, 0, 0.08) 0 10%, transparent 11%),
+            radial-gradient(circle at 64% 64%, rgba(0, 0, 0, 0.06) 0 14%, transparent 15%),
+            radial-gradient(circle at 66% 28%, rgba(0, 0, 0, 0.05) 0 7%, transparent 8%),
+            #f4f1de;
+    box-shadow:
+            0 0 0 12px rgba(244, 241, 222, 0.1),
+            0 0 60px 20px rgba(244, 241, 222, 0.15);
+}
+
+.cloud,
+.landscape {
+    pointer-events: none;
 }
 
 .cloud {
     position: absolute;
-    width: 110px;
-    height: 28px;
+    left: 0;
+    width: 120px;
+    height: 32px;
     border-radius: 50px;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--cloud);
+    box-shadow: 0 8px 20px rgba(18, 48, 74, 0.06);
     z-index: -1;
+    animation: drift 80s linear infinite;
 }
 
 .cloud::before,
@@ -52,35 +136,51 @@ body {
 
 .cloud::before {
     left: 20px;
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
 }
 
 .cloud::after {
     right: 18px;
-    width: 55px;
-    height: 55px;
+    width: 62px;
+    height: 62px;
 }
 
 .cloud-one {
-    top: 10%;
-    left: -35px;
+    top: 9%;
+    animation-delay: -20s;
 }
 
 .cloud-two {
-    top: 20%;
-    right: -35px;
-    transform: scale(0.75);
+    top: 22%;
+    scale: 0.7;
+    opacity: 0.8;
+    animation-duration: 110s;
+    animation-delay: -75s;
 }
 
+.cloud-three {
+    top: 4%;
+    scale: 0.5;
+    opacity: 0.7;
+    animation-duration: 140s;
+    animation-delay: -40s;
+}
+
+@keyframes drift {
+    from { transform: translateX(-180px); }
+    to { transform: translateX(100vw); }
+}
+
+/* Card */
 .card {
     width: min(100%, 430px);
     padding: 34px 22px 30px;
     text-align: center;
-    background: rgba(255, 248, 232, 0.95);
+    background: var(--card);
     border: 4px solid var(--navy);
     border-radius: 28px;
-    box-shadow: 0 12px 0 rgba(18, 48, 74, 0.18);
+    box-shadow: 0 12px 0 var(--card-shadow);
 }
 
 .flag {
@@ -95,15 +195,6 @@ body {
             white 33.33% 66.66%,
             #21468b 66.66%
     );
-}
-
-.eyebrow {
-    margin: 0 0 8px;
-    color: var(--red);
-    font-size: 0.85rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
 }
 
 h1 {
@@ -136,77 +227,46 @@ h1 span {
     transform: rotate(-3deg);
 }
 
+/* Landscape */
 .landscape {
     position: absolute;
     inset: auto 0 0;
-    height: 150px;
-    overflow: visible; /* prevents decorative elements from being clipped */
+    height: var(--landscape);
+    filter: var(--scenery);
     z-index: -1;
 }
-.water {
-    position: absolute;
-    inset: 72px 0 0;
-    background: repeating-linear-gradient(
-            to bottom,
-            #3cafd0 0 3px,
-            transparent 3px 13px
-    );
-    opacity: 0.65;
-}
 
-.horizon {
+.layer {
     position: absolute;
-    bottom: 55px;
+    inset: 0;
     width: 100%;
-    height: 65px;
-    background: var(--green);
-    clip-path: polygon(
-            0 42%, 8% 36%, 16% 43%, 25% 28%, 35% 40%,
-            44% 25%, 55% 38%, 64% 30%, 73% 44%, 84% 27%,
-            94% 41%, 100% 33%, 100% 100%, 0 100%
-    );
+    height: 100%;
 }
 
-
-.bicycle {
+.windmill {
     position: absolute;
-    left: 8%;
-    bottom: 35px;
-    color: var(--navy);
-    font-size: 58px;
-    transform: rotate(-8deg);
+    right: 14%;
+    bottom: 46%;
+    height: 50%;
 }
 
-.tulips {
-    position: absolute;
-    bottom: 36px;
-    left: 50%;
-    width: 170px;
-    transform: translateX(-50%);
-    font-size: 2.3rem;
-    letter-spacing: 10px;
-    white-space: nowrap;
+.sails {
+    transform-box: view-box;
+    transform-origin: 50px 58px;
+    animation: spin 14s linear infinite;
 }
 
-.tulips span:nth-child(1) { color: var(--red); }
-.tulips span:nth-child(2) { color: var(--yellow); }
-.tulips span:nth-child(3) { color: var(--pink); }
-.tulips span:nth-child(4) { color: var(--red); }
+@keyframes spin {
+    to { transform: rotate(-360deg); }
+}
 
-@media (min-width: 600px) {
-    .page {
-        padding-bottom: 180px;
+@media (prefers-reduced-motion: reduce) {
+    .cloud,
+    .sails {
+        animation: none;
     }
 
-    .landscape {
-        height: 180px;
-    }
-
-    .windmill {
-        right: 20%;
-    }
-
-    .bicycle {
-        left: 18%;
-    }
+    .cloud-one { translate: 8vw; }
+    .cloud-two { translate: 70vw; }
+    .cloud-three { translate: 40vw; }
 }

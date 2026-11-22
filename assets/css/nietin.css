@@ -6,6 +6,32 @@
     --coral: #ef6f61;
     --yellow: #f7c948;
     --green: #4d9f70;
+    --muted: #59758d;
+    --globe: min(135vw, 95vh);
+    --globe-x: 50%; /* horizontal centre of globe and plane overlay */
+    --sky-top: #b9eaff;
+    --sky-mid: #7cc4e6;
+    --sky-low: #3a8dbd;
+    --card: rgba(255, 250, 240, 0.96);
+    --card-shadow: rgba(16, 42, 67, 0.2);
+    --cloud: rgba(255, 255, 255, 0.75);
+    --dots: rgba(255, 255, 255, 0.45);
+    --globe-shadow: rgba(16, 42, 67, 0.25);
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --navy: #f6efe0;
+    --coral: #ff8a7d;
+    --muted: #9fb3c8;
+    --sky-top: #0d1b33;
+    --sky-mid: #14315a;
+    --sky-low: #1d4f7c;
+    --card: rgba(22, 36, 58, 0.96);
+    --card-shadow: rgba(0, 0, 0, 0.35);
+    --cloud: rgba(190, 205, 235, 0.15);
+    --dots: rgba(255, 255, 255, 0.18);
+    --globe-shadow: rgba(0, 0, 0, 0.4);
 }
 
 * {
@@ -14,156 +40,238 @@
 
 body {
     margin: 0;
-    min-height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
     font-family: Arial, Helvetica, sans-serif;
     color: var(--navy);
-    background:
-            radial-gradient(circle at 15% 20%, rgba(255,255,255,.8) 0 2px, transparent 3px),
-            radial-gradient(circle at 80% 15%, rgba(255,255,255,.7) 0 2px, transparent 3px),
-            linear-gradient(160deg, #b9eaff, #6dbbdd 55%, #327da8);
-    background-size: 130px 130px, 180px 180px, cover;
+    background: linear-gradient(170deg, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-low) 100%);
 }
 
 .page {
     position: relative;
     min-height: 100vh;
+    min-height: 100dvh;
     display: grid;
     place-items: center;
-    padding: 24px 16px;
+    /* keep the card above the globe so the route stays visible */
+    padding: 24px 16px max(0px, min(calc(var(--globe) * 0.5), 40dvh, 100dvh - 540px));
+    overflow: hidden;
     isolation: isolate;
 }
 
-/* Decorative globe */
-.globe {
+/* Faint map grid of dots */
+.page::before {
+    content: "";
     position: absolute;
-    top: -95px;
-    right: -110px;
-    width: 310px;
-    height: 310px;
-    border: 18px solid rgba(255, 255, 255, 0.35);
+    inset: 0;
+    background: radial-gradient(var(--dots) 1.2px, transparent 1.8px) 0 0 / 22px 22px;
+    mask-image: radial-gradient(ellipse at center, transparent 20%, #000 75%);
+    z-index: -3;
+}
+
+/* At night the dot grid gives way to stars */
+:root[data-theme="dark"] .page::before {
+    background: url(../stars.svg?v=1) 0 0 / 900px 700px;
+    mask-image: linear-gradient(to bottom, #000 40%, transparent);
+}
+
+/* Sky: the sun/moon doubles as the theme toggle */
+.sun {
+    position: absolute;
+    top: 12px;
+    right: 42px;
+    width: 96px;
+    height: 96px;
+    padding: 0;
+    border: 0;
     border-radius: 50%;
-    background:
-            linear-gradient(25deg, transparent 45%, rgba(255,255,255,.22) 46% 48%, transparent 49%),
-            linear-gradient(-25deg, transparent 52%, rgba(255,255,255,.18) 53% 55%, transparent 56%),
-            #2384b5;
+    background-color: #fff6c9;
     box-shadow:
-            inset -30px -25px 0 rgba(12, 61, 94, 0.2),
-            0 20px 50px rgba(16, 42, 67, 0.2);
+            0 0 0 26px rgba(255, 233, 150, 0.45),
+            0 0 90px 50px rgba(255, 233, 150, 0.5);
+    cursor: pointer;
+    transition: all 0.5s ease;
+    -webkit-tap-highlight-color: transparent;
     z-index: -2;
 }
 
-.globe::before,
-.globe::after {
-    content: "";
-    position: absolute;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
+.sun:hover {
+    scale: 1.06;
 }
 
-.globe::before {
-    inset: 20px 65px;
+.sun:focus-visible {
+    outline: 3px solid var(--navy);
+    outline-offset: 30px;
 }
 
-.globe::after {
-    inset: 65px 20px;
-}
-
-/* World-map-like decorative shapes */
-.continent {
-    position: absolute;
-    background: rgba(246, 218, 154, 0.75);
-    border-radius: 48% 52% 40% 60%;
-    z-index: -1;
-}
-
-.continent-one {
-    width: 130px;
-    height: 65px;
-    top: 13%;
-    left: 3%;
-    transform: rotate(-20deg);
-}
-
-.continent-two {
-    width: 90px;
-    height: 130px;
-    bottom: 8%;
-    right: 4%;
-    transform: rotate(25deg);
-}
-
-.continent-three {
-    width: 75px;
-    height: 42px;
-    top: 38%;
+:root[data-theme="dark"] .sun {
+    top: 6%;
     right: 12%;
-    transform: rotate(-12deg);
+    width: 64px;
+    height: 64px;
+    background:
+            radial-gradient(circle at 34% 38%, rgba(0, 0, 0, 0.08) 0 10%, transparent 11%),
+            radial-gradient(circle at 64% 64%, rgba(0, 0, 0, 0.06) 0 14%, transparent 15%),
+            radial-gradient(circle at 66% 28%, rgba(0, 0, 0, 0.05) 0 7%, transparent 8%),
+            #f4f1de;
+    box-shadow:
+            0 0 0 12px rgba(244, 241, 222, 0.1),
+            0 0 60px 20px rgba(244, 241, 222, 0.15);
 }
 
-/* Travel route */
-.route {
+.cloud,
+.globe {
+    pointer-events: none;
+}
+
+.cloud {
     position: absolute;
-    width: 240px;
-    height: 130px;
-    top: 18%;
-    left: 18%;
-    border-top: 3px dashed rgba(255, 255, 255, 0.75);
-    border-radius: 50%;
-    transform: rotate(18deg);
-    z-index: -1;
+    left: 0;
+    width: 120px;
+    height: 32px;
+    border-radius: 50px;
+    background: var(--cloud);
+    z-index: -2;
+    animation: drift 100s linear infinite;
 }
 
-.pin {
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    border: 4px solid white;
-    border-radius: 50% 50% 50% 0;
-    background: var(--coral);
-    transform: rotate(-45deg);
-    box-shadow: 0 3px 8px rgba(16, 42, 67, 0.25);
-    z-index: -1;
-}
-
-.pin::after {
+.cloud::before,
+.cloud::after {
     content: "";
     position: absolute;
-    inset: 4px;
+    bottom: 0;
     border-radius: 50%;
-    background: white;
+    background: inherit;
 }
 
-.pin-netherlands {
-    top: 19%;
-    left: 17%;
+.cloud::before {
+    left: 20px;
+    width: 48px;
+    height: 48px;
 }
 
-.pin-destination {
-    top: 35%;
-    right: 18%;
-    background: var(--yellow);
+.cloud::after {
+    right: 18px;
+    width: 62px;
+    height: 62px;
 }
 
-.airplane {
+.cloud-one {
+    top: 8%;
+    animation-delay: -30s;
+}
+
+.cloud-two {
+    top: 30%;
+    scale: 0.65;
+    opacity: 0.7;
+    animation-duration: 130s;
+    animation-delay: -90s;
+}
+
+@keyframes drift {
+    from { transform: translateX(-180px); }
+    to { transform: translateX(100vw); }
+}
+
+/* Big globe rising from the bottom; top 60% visible */
+.globe {
     position: absolute;
-    top: 27%;
-    left: 48%;
-    color: white;
-    font-size: 2.3rem;
-    transform: rotate(18deg);
-    filter: drop-shadow(0 4px 3px rgba(16, 42, 67, 0.2));
-    z-index: -1;
+    left: var(--globe-x);
+    bottom: calc(var(--globe) * -0.4);
+    width: var(--globe);
+    translate: -50% 0;
+    /* box-shadow, not filter: filters are expensive to repaint on an element this big */
+    border-radius: 50%;
+    box-shadow: 0 20px 40px var(--globe-shadow);
+    z-index: -2;
 }
 
+.globe .night {
+    display: none;
+}
+
+/*
+ * Plane: an overlay the exact size of the globe. .plane is also globe-sized, so
+ * translate percentages are fractions of the globe (globe SVG units / 2) and the
+ * motion scales with it. Only transform and opacity animate, so the browser can
+ * run it on the compositor without repainting the globe.
+ * Keyframes are sampled at equal distances along the route curve in the globe SVG.
+ */
+.flight {
+    position: absolute;
+    left: var(--globe-x);
+    bottom: calc(var(--globe) * -0.4);
+    width: var(--globe);
+    aspect-ratio: 1;
+    translate: -50% 0;
+    pointer-events: none;
+    z-index: -2;
+}
+
+.plane {
+    position: absolute;
+    inset: 0;
+    transform-origin: 0 0;
+    animation: fly 8s linear infinite;
+    will-change: transform;
+}
+
+.plane svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4.8%;
+    translate: -50% -50%;
+    animation: fade 8s linear infinite;
+}
+
+@keyframes fly {
+    0% { transform: translate(56.89%, 24.53%) rotate(-148.0deg); }
+    5% { transform: translate(54.91%, 23.32%) rotate(-149.1deg); }
+    10% { transform: translate(52.93%, 22.16%) rotate(-150.3deg); }
+    15% { transform: translate(50.91%, 21.04%) rotate(-151.6deg); }
+    20% { transform: translate(48.87%, 19.97%) rotate(-153.1deg); }
+    25% { transform: translate(46.81%, 18.96%) rotate(-154.8deg); }
+    30% { transform: translate(44.69%, 18.01%) rotate(-156.6deg); }
+    35% { transform: translate(42.56%, 17.13%) rotate(-158.7deg); }
+    40% { transform: translate(40.40%, 16.34%) rotate(-161.0deg); }
+    45% { transform: translate(38.22%, 15.64%) rotate(-163.7deg); }
+    50% { transform: translate(35.99%, 15.05%) rotate(-166.7deg); }
+    55% { transform: translate(33.72%, 14.58%) rotate(-170.2deg); }
+    60% { transform: translate(31.44%, 14.27%) rotate(-174.1deg); }
+    65% { transform: translate(29.15%, 14.12%) rotate(-178.6deg); }
+    70% { transform: translate(26.85%, 14.16%) rotate(-183.7deg); }
+    75% { transform: translate(24.55%, 14.43%) rotate(-189.5deg); }
+    80% { transform: translate(22.31%, 14.93%) rotate(-195.8deg); }
+    85% { transform: translate(20.13%, 15.68%) rotate(-202.5deg); }
+    90% { transform: translate(18.07%, 16.68%) rotate(-209.3deg); }
+    95% { transform: translate(16.13%, 17.92%) rotate(-216.0deg); }
+    100% { transform: translate(14.35%, 19.38%) rotate(-222.3deg); }
+}
+
+@keyframes fade {
+    0% { opacity: 0; }
+    10%, 85% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+:root[data-theme="dark"] .globe .night {
+    display: inline;
+}
+
+:root[data-theme="dark"] .globe .sea {
+    fill: url(#sea-night);
+}
+
+/* Card */
 .card {
     width: min(100%, 430px);
     padding: 34px 22px 30px;
     text-align: center;
-    background: rgba(255, 250, 240, 0.96);
+    background: var(--card);
     border: 4px solid var(--navy);
     border-radius: 28px;
-    box-shadow: 0 14px 0 rgba(16, 42, 67, 0.2);
+    box-shadow: 0 14px 0 var(--card-shadow);
 }
 
 .travel-icon {
@@ -178,15 +286,6 @@ body {
     color: white;
     font-size: 2.5rem;
     transform: rotate(-8deg);
-}
-
-.eyebrow {
-    margin: 0 0 8px;
-    color: var(--blue);
-    font-size: 0.85rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
 }
 
 h1 {
@@ -221,21 +320,31 @@ h1 span {
 
 .coordinates {
     margin: 20px 0 0;
-    color: #59758d;
+    color: var(--muted);
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
-@media (min-width: 600px) {
-    .globe {
-        top: -120px;
-        right: -80px;
-        width: 380px;
-        height: 380px;
+@media (prefers-reduced-motion: reduce) {
+    .cloud {
+        animation: none;
     }
 
-    .route {
-        left: 28%;
+    .cloud-one { translate: 10vw; }
+    .cloud-two { translate: 65vw; }
+
+    .plane,
+    .plane svg {
+        animation: none;
+    }
+
+    .plane { transform: translate(42.56%, 17.13%) rotate(-158.7deg); }
+}
+
+/* Desktop: globe sits to the left */
+@media (min-width: 900px) {
+    :root {
+        --globe-x: 32%;
     }
 }

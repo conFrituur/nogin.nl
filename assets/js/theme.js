@@ -1,12 +1,14 @@
 (function () {
     const root = document.documentElement;
     const query = window.matchMedia("(prefers-color-scheme: dark)");
+    // cookie on the parent domain so all *.nogin.nl subdomains share the preference
+    const domain = /(^|\.)nogin\.nl$/.test(location.hostname) ? "; domain=nogin.nl" : "";
     const read = () => {
-        try {
-            return localStorage.getItem("theme");
-        } catch (e) {
-            return null;
-        }
+        const match = document.cookie.match(/(?:^|; )theme=(dark|light)/);
+        return match ? match[1] : null;
+    };
+    const save = (theme) => {
+        document.cookie = "theme=" + theme + "; path=/; max-age=31536000; samesite=lax" + domain;
     };
     const apply = (theme) => {
         root.dataset.theme = theme;
@@ -18,7 +20,7 @@
             button.setAttribute("aria-label", label);
         }
         if (meta) {
-            meta.content = theme === "dark" ? "#111827" : "#6150ff";
+            meta.content = theme === "dark" ? meta.dataset.dark : meta.dataset.light;
         }
     };
 
@@ -39,11 +41,7 @@
         button.addEventListener("click", () => {
             const theme = root.dataset.theme === "dark" ? "light" : "dark";
             apply(theme);
-            try {
-                localStorage.setItem("theme", theme);
-            } catch (e) {
-                // storage unavailable: preference lasts for this page only
-            }
+            save(theme);
         });
     });
 })();

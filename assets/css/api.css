@@ -204,11 +204,6 @@ h2 {
     color: #175cd3;
 }
 
-.put {
-    background: #f4f3ff;
-    color: #5925dc;
-}
-
 .route {
     min-width: 0;
     overflow-wrap: anywhere;
@@ -329,8 +324,4 @@ li code {
     html {
         scroll-behavior: auto;
     }
-}
-
-.endpoint-body .put-note {
-    margin-top: 14px;
 }

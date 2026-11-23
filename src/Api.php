@@ -42,7 +42,7 @@ class Api
                 $this->getPerson($name);
             }
 
-            if ($method === 'PATCH' || $method === 'PUT') {
+            if ($method === 'PATCH') {
                 $this->updatePerson($name);
                 $this->getPerson($name);
             }

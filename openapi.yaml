@@ -55,28 +55,7 @@ paths:
       description: >-
         Updates a person's nogin.nl state. The request body must be a JSON
         encoded object containing 'isNogInNL' with a boolean value.
-        The API also accepts PUT for this route.
       operationId: updatePerson
-      requestBody:
-        $ref: '#/components/requestBodies/UpdatePerson'
-      responses:
-        '200':
-          description: The updated person
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Person'
-              example:
-                name: sjaak
-                isNogInNL: false
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    put:
-      summary: Update a person
-      description: Same as PATCH.
-      operationId: replacePerson
       requestBody:
         $ref: '#/components/requestBodies/UpdatePerson'
       responses:

@@ -26,7 +26,7 @@
 
 - Syntax checks + manual verification
 - Check: page render, toggle, persistence across reload
-- API: collection + individual GET, PATCH/PUT `{"isNogInNL":false}`, malformed body, unknown name
+- API: collection + individual GET, PATCH `{"isNogInNL":false}`, PUT rejected (404), malformed body, unknown name
 - Mutation tests on local data only
 - UI: mobile layout, hostname routing
 - Record checks that could not be run

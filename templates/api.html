@@ -3,11 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#101828">
+    <meta name="theme-color" content="#101828" data-light="#101828" data-dark="#0f1522">
     <title>Nogin.nl API — Documentation</title>
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="/assets/css/api.css?v=7">
+    <link rel="stylesheet" href="/assets/css/api.css?v=13">
+    <script src="/assets/js/theme.js?v=4"></script>
 </head>
 <body>
 <header class="mobile-header">
@@ -17,17 +18,23 @@
             <span>Nogin.nl API <!-- keep in sync with info.version in openapi.yaml --><small>v1.1.0</small></span>
         </a>
 
-        <button
-                class="menu-toggle"
-                type="button"
-                aria-label="Open menu"
-                aria-expanded="false"
-                aria-controls="docs-nav"
-        >
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        <div class="header-actions">
+            <button type="button" class="theme-button" title="Switch to dark mode" aria-label="Switch to dark mode">
+                <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+                <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+            </button>
+            <button
+                    class="menu-toggle"
+                    type="button"
+                    aria-label="Open menu"
+                    aria-expanded="false"
+                    aria-controls="docs-nav"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
     </div>
 
     <nav id="docs-nav" aria-label="Documentation">

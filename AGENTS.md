@@ -40,6 +40,11 @@
 - Short plain focused commit messages (e.g. `update favicon`)
 - PR: behavior changed, verification done, linked issues, screenshots for visual changes
 
+# API docs
+
+- `openapi.yaml` and `templates/api.html` must stay in sync (routes, methods, descriptions, `info.version` vs the versions in the menu header and overview eyebrow)
+- Bump `info.version` (and the HTML versions, and add a "Changelog" entry in `templates/api.html`) on every API change: patch for small changes (fixes, wording, docs), minor for bigger ones (new or changed endpoints/behavior); major only when asked
+
 # Persistence
 
 - PHP needs write access to repo root (temp state files)

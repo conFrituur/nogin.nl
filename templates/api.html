@@ -7,14 +7,14 @@
     <title>Nogin.nl API — Documentation</title>
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="/assets/css/api.css?v=4">
+    <link rel="stylesheet" href="/assets/css/api.css?v=6">
 </head>
 <body>
 <header class="mobile-header">
     <div class="header-top">
         <a class="brand" href="#overview">
             <img src="/assets/apple-touch-icon.png" alt="" width="32" height="32">
-            <span>Nogin.nl API</span>
+            <span>Nogin.nl API <!-- keep in sync with info.version in openapi.yaml --><small>v1.1.0</small></span>
         </a>
 
         <button
@@ -34,11 +34,13 @@
         <a href="#list-items">- <strong>LIST</strong> /persons</a>
         <a href="#get-item">- <strong>GET</strong> /persons/{name}</a>
         <a href="#update-item">- <strong>UPDATE</strong> /persons/{name}</a>
+        <div class="nav-divider" role="separator"></div>
+        <a href="#changelog">- <strong>CHANGELOG</strong></a>
     </nav>
 </header>
 <main>
     <section id="overview">
-        <p class="eyebrow">API reference</p>
+        <p class="eyebrow">API reference <!-- keep in sync with info.version in openapi.yaml -->· v1.1.0</p>
         <h1>Nogin.nl REST API</h1>
         <p class="intro">Simple endpoint for working with nogin.nl. Requests and responses use JSON.</p>
         <div class="base-url">
@@ -105,6 +107,17 @@
         </ul>
         <div class="label">Example error response</div>
         <pre><code>{"error": "Person not found"}</code></pre>
+    </section>
+
+    <section id="changelog">
+        <h2>Changelog</h2>
+        <!-- keep in sync with info.version in openapi.yaml; newest first -->
+        <ul class="errors">
+            <li><code>1.1.0</code> (2026-11-23) — <strong>PUT</strong> is no longer accepted on <code>/persons/{name}</code>; use PATCH.</li>
+            <li><code>1.0.2</code> (2026-11-22) — OpenAPI specification (<code>openapi.yaml</code>) added.</li>
+            <li><code>1.0.1</code> (2026-10-14) — Fix: the state is now locked before it is read, preventing stale reads and lost updates.</li>
+            <li><code>1.0.0</code> (2026-10-09) — Initial release: list persons, get a person, update a person (PATCH or PUT).</li>
+        </ul>
     </section>
 </main>
 <script src="/assets/js/api.js"></script>

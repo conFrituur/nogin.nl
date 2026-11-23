@@ -53,6 +53,13 @@ body {
     text-decoration: none;
 }
 
+.brand small {
+    margin-left: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.7;
+}
+
 .brand img {
     display: block;
     flex-shrink: 0;
@@ -101,6 +108,12 @@ nav a {
     color: #e4e7ec;
     text-decoration: none;
     font-size: 14px;
+}
+
+.nav-divider {
+    height: 1px;
+    margin: 6px 11px;
+    background: #344054;
 }
 
 nav a:hover,

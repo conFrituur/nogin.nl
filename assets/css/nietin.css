@@ -14,7 +14,6 @@
     --sky-low: #3a8dbd;
     --card: rgba(255, 250, 240, 0.96);
     --card-shadow: rgba(16, 42, 67, 0.2);
-    --cloud: rgba(255, 255, 255, 0.75);
     --dots: rgba(255, 255, 255, 0.45);
     --globe-shadow: rgba(16, 42, 67, 0.25);
 }
@@ -29,7 +28,6 @@
     --sky-low: #1d4f7c;
     --card: rgba(22, 36, 58, 0.96);
     --card-shadow: rgba(0, 0, 0, 0.35);
-    --cloud: rgba(190, 205, 235, 0.15);
     --dots: rgba(255, 255, 255, 0.18);
     --globe-shadow: rgba(0, 0, 0, 0.4);
 }
@@ -119,59 +117,8 @@ body {
     filter: drop-shadow(0 0 18px rgba(244, 241, 222, 0.35));
 }
 
-.cloud,
 .globe {
     pointer-events: none;
-}
-
-.cloud {
-    position: absolute;
-    left: 0;
-    width: 120px;
-    height: 32px;
-    border-radius: 50px;
-    background: var(--cloud);
-    z-index: -2;
-    animation: drift 100s linear infinite;
-}
-
-.cloud::before,
-.cloud::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    border-radius: 50%;
-    background: inherit;
-}
-
-.cloud::before {
-    left: 20px;
-    width: 48px;
-    height: 48px;
-}
-
-.cloud::after {
-    right: 18px;
-    width: 62px;
-    height: 62px;
-}
-
-.cloud-one {
-    top: 8%;
-    animation-delay: -30s;
-}
-
-.cloud-two {
-    top: 30%;
-    scale: 0.65;
-    opacity: 0.7;
-    animation-duration: 130s;
-    animation-delay: -90s;
-}
-
-@keyframes drift {
-    from { transform: translateX(-180px); }
-    to { transform: translateX(100vw); }
 }
 
 /* Big globe rising from the bottom; top 60% visible */
@@ -343,13 +290,6 @@ h1 span {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .cloud {
-        animation: none;
-    }
-
-    .cloud-one { translate: 10vw; }
-    .cloud-two { translate: 65vw; }
-
     .plane,
     .plane svg {
         animation: none;

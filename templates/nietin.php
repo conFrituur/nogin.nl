@@ -7,15 +7,13 @@
     <title><?php echo ucfirst($name) ?> is nietin.nl</title>
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="/assets/css/nietin.css?v=14">
+    <link rel="stylesheet" href="/assets/css/nietin.css?v=15">
     <script src="/assets/js/theme.js?v=3"></script>
 </head>
 
 <body>
 <main class="page">
     <button type="button" id="theme-toggle" class="sun" title="Switch to dark mode" aria-label="Switch to dark mode"></button>
-    <div class="cloud cloud-one" aria-hidden="true"></div>
-    <div class="cloud cloud-two" aria-hidden="true"></div>
 
     <svg class="globe" viewBox="0 0 200 200" aria-hidden="true">
         <defs>

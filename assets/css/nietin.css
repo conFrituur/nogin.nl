@@ -32,6 +32,10 @@
     --globe-shadow: rgba(0, 0, 0, 0.4);
 }
 
+:root[data-theme="dark"] body {
+    background-color: var(--sky-top);
+}
+
 * {
     box-sizing: border-box;
 }
@@ -42,6 +46,8 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     color: var(--navy);
     background: linear-gradient(170deg, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-low) 100%);
+    /* Safari fills its status bar and address bar areas with this colour (white without it) */
+    background-color: #fff1d6;
 }
 
 .page {
